@@ -23,6 +23,7 @@ def extract_text(image_path):
     image = Image.open(image_path)
     custom_config = r'--oem 3 --psm 6'
     text = pytesseract.image_to_string(image, config=custom_config)
+    formatted_text = add_newlines(text, line_length=80)
     return text
 
 def classify_text(text):
@@ -30,6 +31,34 @@ def classify_text(text):
     outputs = model(inputs)
     predictions = tf.nn.softmax(outputs.logits, axis=-1)
     return predictions
+
+# def parse_receipt(receipt_text):
+#     # Ekstraksi produk dan harga menggunakan regular expression
+#     pattern = re.compile(r'([A-Z/\s]+)\s+\d+\s+(\d+,\d+)')
+#     matches = pattern.findall(receipt_text)
+
+#     # Format hasil ekstraksi ke dalam JSON
+#     products = []
+#     for match in matches:
+#         product_name = match[0].strip()
+#         price = match[1].replace(',', '')
+#         products.append({"product_name": product_name, "price": int(price)})
+
+#     # Convert to JSON
+#     products_json = json.dumps(products, indent=4)
+
+#     return products_json
+
+def add_newlines(text, line_length=80):
+    lines = []
+    while len(text) > line_length:
+        space_index = text.rfind(' ', 0, line_length)
+        if space_index == -1:
+            space_index = line_length
+        lines.append(text[:space_index])
+        text = text[space_index:].strip()
+    lines.append(text)
+    return '\n'.join(lines)
 
 def extract_products_from_receipt(text):
     # Pola regex untuk mencocokkan nama produk, jumlah, harga satuan, dan total harga
@@ -55,29 +84,28 @@ def extract_products_from_receipt(text):
     return products
 
 # def extract_products_from_receipt(receipt_text):
-    # Pola regex untuk mencocokkan produk dan harganya
-    # pattern = r"([A-Z0-9/\s]+) (\d+) (\d+),?(\d*) (\d+),?(\d*)"
-    pattern = r"([A-Z\s/]+)\s+(\d+)\s+(\d+)\s+(\d{1,3},\d{3})"
+#     # Pola regex untuk mencocokkan produk dan harganya
+#     # pattern = r"([A-Z0-9/\s]+) (\d+) (\d+),?(\d*) (\d+),?(\d*)"
+#     pattern = r"([A-Z\s/]+)\s+(\d+)\s+(\d+)\s+(\d{1,3},\d{3})"
 
-    # Menemukan semua kecocokan dalam teks struk
-    matches = re.findall(pattern, receipt_text)
+#     # Menemukan semua kecocokan dalam teks struk
+#     matches = re.findall(pattern, receipt_text)
 
-    # Menampung produk dan harganya
-    products = []
+#     # Menampung produk dan harganya
+#     products = []
 
-    for match in matches:
-        nama_produk = match[0].strip()
-        jumlah = int(match[1])
-        harga_satuan = int(match[2] + match[3])
-        total_harga = int(match[4] + match[5])
-        products.append({
-            "nama_produk": nama_produk,
-            "jumlah": jumlah,
-            "harga_satuan": harga_satuan,
-            "total_harga": total_harga
-        })
-
-    return products
+#     for match in matches:
+#         nama_produk = match[0].strip()
+#         jumlah = int(match[1])
+#         harga_satuan = int(match[2] + match[3])
+#         total_harga = int(match[4] + match[5])
+#         products.append({
+#             "nama_produk": nama_produk,
+#             "jumlah": jumlah,
+#             "harga_satuan": harga_satuan,
+#             "total_harga": total_harga
+#         })
+#     return products
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
