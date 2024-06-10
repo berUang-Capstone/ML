@@ -14,13 +14,13 @@ with open('Api/tokenizer.joblib', 'rb') as f:
     tokenizer = joblib.load(f)
 with open('Api/label_encoder.joblib', 'rb') as f:
     label_encoder = joblib.load(f)
-    
 
 # Preprocess function to convert text input into a format the model expects
 def preprocess_text(text):
     # Tokenize and pad the text as needed
     # This should match the preprocessing done during training
     # For demonstration, assuming the existence of a tokenizer and max_length
+    text = text.lower()
     sequences = tokenizer.texts_to_sequences([text])
     padded_sequences = tf.keras.preprocessing.sequence.pad_sequences(sequences, maxlen=5 , padding='post')
     return padded_sequences
