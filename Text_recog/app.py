@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug.utils import secure_filename
 import os
 import pytesseract
@@ -142,9 +142,9 @@ def upload_file():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             text = extract_text(filepath)
-            products = extract_products_from_receipt(text)
-            return render_template('result.html', text=text, products=products)
-    return render_template('index.html')
-
+            productsjson = extract_products_from_receipt(text)
+    #         return render_template('result.html', text=text, products=products)
+    # return render_template('index.html')
+    return productsjson
 if __name__ == '__main__':
     app.run(debug=True)
