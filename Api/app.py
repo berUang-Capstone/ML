@@ -50,7 +50,7 @@ def predict():
         predicted_class = "other"
     else:
         predicted_class_index = np.argmax(prediction, axis=1)
-        predicted_class = label_encoder.inverse_transform(predicted_class_index)[0]
+        predicted_class = label_encoder.inverse_transform(predicted_class_index)
 
     # Output prediksi kelas
     print("Predicted Class:", predicted_class)

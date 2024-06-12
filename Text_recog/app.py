@@ -9,7 +9,7 @@ import json
 import re
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'D:/MSIB/Text_recog/uploads/'
+app.config['UPLOAD_FOLDER'] = "C:\Users\sapyy\Documents\bangkit\ML\Text_recog\uploads\"
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Load the pre-trained BERT model and tokenizer
