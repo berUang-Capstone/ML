@@ -1,1 +1,6 @@
 /.venv
+/tesapi.py
+Text_recog/spacytest.py
+Text_recog/test.py
+Text_recog/testregex.py
+Text_recog/cekspacy.py
