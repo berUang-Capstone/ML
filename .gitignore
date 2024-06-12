@@ -5,3 +5,4 @@ Text_recog/test.py
 Text_recog/testregex.py
 Text_recog/cekspacy.py
 /testing
+.vscode
