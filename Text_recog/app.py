@@ -142,9 +142,10 @@ def upload_file():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             text = extract_text(filepath)
-            productsjson = extract_products_from_receipt(text)
-    #         return render_template('result.html', text=text, products=products)
-    # return render_template('index.html')
-    return productsjson
+            products = extract_products_from_receipt(text)
+            return render_template('result.html', text=text, products=products)
+    return render_template('index.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
