@@ -43,25 +43,26 @@ def predict():
     # Make a prediction
     prediction = model.predict(input_data)
     
-    treshold = 0.3
+    treshold = 0.75
 
     # Memeriksa apakah probabilitas tertinggi kurang dari treshold
     if np.max(prediction) < treshold:
         predicted_class = "other"
     else:
         predicted_class_index = np.argmax(prediction, axis=1)
-        predicted_class = label_encoder.inverse_transform(predicted_class_index)
+        predicted_class = label_encoder.inverse_transform(predicted_class_index)[0]
 
     # Output prediksi kelas
     print("Predicted Class:", predicted_class)
-
-    probabilities_rounded = [float(round(prob, 4)) for prob in prediction[0]]
     # print("Predicted probabilities:", probabilities_rounded)
     
     # Return the prediction as a JSON response
+    prediction_list = prediction.tolist()
+    
+    # Return the prediction as a JSON response
     return jsonify({
-                    'probabilities': probabilities_rounded,
                     'class_predicted': predicted_class, 
+                    'prediction_array': prediction_list
                     })
 
 if __name__ == '__main__':
